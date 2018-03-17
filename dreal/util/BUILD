@@ -249,6 +249,22 @@ dreal_cc_library(
     ],
 )
 
+dreal_cc_library(
+    name = "let_expander",
+    hdrs = [
+        "let_expander.h",
+    ],
+    srcs = [
+        "let_expander.cc",
+    ],
+    deps = [
+        ":exception",
+        ":logging",
+        "//dreal/symbolic",
+        "//dreal/smt2:term",
+    ],
+)
+
 
 # -----
 # Tests

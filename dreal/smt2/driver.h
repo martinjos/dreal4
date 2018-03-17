@@ -1,6 +1,7 @@
 #include <istream>
 #include <string>
 #include <vector>
+#include <map>
 
 #include "dreal/smt2/location.hh"
 #include "dreal/smt2/scanner.h"
@@ -82,6 +83,8 @@ class Smt2Driver {
   void PopScope() { scope_.pop(); }
 
   Variable ParseVariableSort(const std::string& name, Sort s);
+
+  Term ExpandLet(const Term& term, const std::map<std::string, Term>& bindings);
 
   //-----------------
   // (public) Members

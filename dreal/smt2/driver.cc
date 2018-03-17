@@ -9,6 +9,7 @@
 #include <experimental/optional>
 
 #include "dreal/smt2/scanner.h"
+#include "dreal/util/let_expander.h"
 
 namespace dreal {
 
@@ -94,6 +95,11 @@ const Variable& Smt2Driver::lookup_variable(const string& name) {
 
 Variable Smt2Driver::ParseVariableSort(const std::string& name, const Sort s) {
   return Variable{name, SortToType(s)};
+}
+
+Term Smt2Driver::ExpandLet(const Term& term,
+                           const std::map<std::string, Term>& bindings) {
+  return LetExpander(bindings).Expand(term);
 }
 
 }  // namespace dreal
