@@ -530,6 +530,26 @@ smt2_test(
 )
 
 smt2_test(
+    name = "let_07",
+    size = "small",
+)
+
+smt2_test(
+    name = "let_08",
+    size = "small",
+)
+
+smt2_test(
+    name = "let_09",
+    size = "small",
+)
+
+smt2_test(
+    name = "let_10",
+    size = "small",
+)
+
+smt2_test(
     name = "lia_01",
     size = "small",
 )

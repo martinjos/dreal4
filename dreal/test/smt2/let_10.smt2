@@ -1,0 +1,12 @@
+(set-logic QF_NRA)
+(declare-const a Real)
+(assert (= a 2))
+(assert
+  (let ((b a))
+    (let ((b 10)
+          (c b))
+      (let ((b a)
+            (d b))
+        (and (= c 2) (= d 10))))))
+(check-sat)
+(exit)

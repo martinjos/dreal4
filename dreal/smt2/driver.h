@@ -91,6 +91,9 @@ class Smt2Driver {
   /// cannot occur in an SMT-LIBv2 file.
   Variable DeclareLocalVariable(const std::string& name, Sort sort);
 
+  // Define a constant within the current scope.
+  void DefineLocalConstant(const std::string& name, const Expression& value);
+
   /// Handles define-fun.
   void DefineFun(const std::string& name,
                  const std::vector<Variable>& parameters, Sort return_type,
@@ -100,10 +103,25 @@ class Smt2Driver {
   /// response to an invocation of the check-sat.
   void GetModel();
 
-  /// Returns a variable associated with a name @p name.
+  class VariableOrConstant {
+   public:
+    explicit VariableOrConstant(const Variable& var)
+      : var_{var}, is_var_{true} {}
+    explicit VariableOrConstant(const Expression& expr)
+      : expr_{expr}, is_var_{false} {}
+    const Variable& variable() const { return var_; }
+    const Expression& expression() const { return expr_; }
+    bool is_variable() const { return is_var_; }
+   private:
+    Variable var_;
+    Expression expr_;
+    bool is_var_;
+  };
+
+  /// Returns a variable or constant expression associated with a name @p name.
   ///
-  /// @throws if no variable is associated with @p name.
-  const Variable& lookup_variable(const std::string& name);
+  /// @throws if no variable or constant expression is associated with @p name.
+  const VariableOrConstant& lookup_variable(const std::string& name);
 
   void PushScope() {
     scope_.push();
@@ -143,8 +161,9 @@ class Smt2Driver {
   /// enable debug output in the bison parser
   bool trace_parsing_{false};
 
-  /** Scoped map from a string to a corresponding Variable. */
-  ScopedUnorderedMap<std::string, Variable> scope_;
+  /** Scoped map from a string to a corresponding Variable or constant
+   * Expression. */
+  ScopedUnorderedMap<std::string, VariableOrConstant> scope_;
 
   /** Scoped map from a string to a corresponding Variable. */
   ScopedUnorderedMap<std::string, FunctionDefinition> function_definition_map_;
